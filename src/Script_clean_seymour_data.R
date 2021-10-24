@@ -5,12 +5,13 @@ library(rgbif)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(here)
 theme_set(theme_classic()) #set ggplot theme here
 
 
 # read in csv with raw data from ebird download
 
-mydata <- read.csv("2021_MBN_data.csv")
+mydata <- read.csv(here("raw/2021_MBN_data.csv"))
 
 # add elevation to each row using "elevation" function from rgbif package
 # takes ~ 2 minutes to extract elevations for each row
@@ -65,9 +66,12 @@ seymour$beyond_50 <- ifelse(seymour$Observation.Details %in% all_beyond_50, seym
 
 seymour$within_50 <- seymour$Count - seymour$beyond_50
 
+# Removing 'passerine sp': 
+seymour <- seymour[!(seymour$Common.Name=="passerine sp."),]
+
 # write a csv with the cleaned data ready for analysis
 
-write.csv(seymour, "seymour.csv")
+write.csv(seymour, here("clean/seymour.csv"))
 
 #######
 # make plot of raw species richness vs. elevation
