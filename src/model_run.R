@@ -9,5 +9,5 @@ fit_seymour_20211022<-stan(here("src/binmix_elevation.stan"),
              seed = 1) #init_r=1, control=list(adapt_delta=0.9))
 
 
-# save(fit_seymour_20210925, file="/home/harold/Dropbox/gitfiles/seymour/fit_seymour_20210925.Rdata")
+ save(fit_seymour_20211022, file="/home/harold/Dropbox/gitfiles/seymour/fit_seymour_20211022.Rdata")
 
