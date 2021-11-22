@@ -64,8 +64,8 @@ pa <- mcmc_intervals(draws,pars = vars(starts_with("a["))) + scale_y_discrete(la
 pb <- mcmc_intervals(draws,pars = vars(starts_with("b["))) + scale_y_discrete(labels = (dimnames(pcdat$y)[3]$spec)) + xlab("b") + yaxis_text(on=FALSE)
 pc <- mcmc_intervals(draws,pars = vars(starts_with("c["))) + scale_y_discrete(labels = (dimnames(pcdat$y)[3]$spec)) + xlab("c") + yaxis_text(on=FALSE)
 pd <- mcmc_intervals(draws,pars = vars(starts_with("d["))) + scale_y_discrete(labels = (dimnames(pcdat$y)[3]$spec)) + xlab("d") + yaxis_text(on=FALSE)
-paramplot <- plot_grid(pm,pa,pb,pc,pd, ncol = 5, rel_widths = c(1.5,1,1,1,1))
-pdf(file = here("out/paramplot_1121.pdf"),width = 9, height = 15)
+paramplot <- plot_grid(pm,pa,pb,pc,pd, ncol = 5, rel_widths = c(2,1,1,1,1))
+pdf(file = here("out/paramplot_1121.pdf"),width = 12, height = 10)
 paramplot
 dev.off()
 poisson_log_rng(M[s]*(1/(1+exp(a[s]+b[s]*elevation_std[i])))*(1/(1+exp(c[s]+d[s]*elevation_std[i]))))
