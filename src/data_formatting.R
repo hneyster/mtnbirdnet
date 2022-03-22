@@ -57,3 +57,7 @@ elevation_std <- stdz(elevation)
 pcdat<-list(y=y, elevation = elevation, elevation_std = elevation_std, R=nsite, J=nrep, S=nspec)
 
 save(pcdat, file = here("fmt/pcdat.Rdata"))
+HETH <-  list(y=y[,,"Hermit Thrush"], elevation = elevation, elevation_std = elevation_std, R=nsite, J=nrep)
+SWTH <- list(y=y[,,"Swainson's Thrush"], elevation = elevation, elevation_std = elevation_std, R=nsite, J=nrep)
+save(HETH, file = here("fmt/HETH.Rdata"))
+save(SWTH, file = here("fmt/SWTH.Rdata"))
