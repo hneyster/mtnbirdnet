@@ -3,7 +3,38 @@
 
 ## Written by Harold Eyster haroldeyster@gmail.com 
 ## Github @hneyster
-## September 2019
+## March 2022
+library(rstan)
+library(here)
+## First singlespecies:
+stdz <- function(x){
+  y <- (x-mean(x))/(2*sd(x))
+}
+R = 400
+x_meters <- sample(1:1400, R)
+x <- stdz(x_meters)
+J=2
+m = 4
+a = -1
+b = 6
+c = -2
+d= 2
+p <- .7
+abund <- function(x)  (m*(1/(1+exp(a+b*x)))* (1/(1+exp(c-d*x))))
+y <- abund(x)
+#plot(x_meters,y)
+z <- NA
+for (i in 1:length(x)){z[i] <- rpois(n=1, lambda=y[i])}
+b <- matrix(nrow=R, ncol = J, NA)
+for (i in 1:R) (b[i,] <- rbinom(n=2, size = z[i], prob = p))
+
+y <- b
+K<-15
+elevation_std <- x
+elevation <- x_meters
+stan_rdump(list =  c('y','elevation', 'elevation_std','R','J','K'), file = here("fmt/sim_1sp.Rdump"))
+
+################# R X V #########################
 
 simbird <- function (type = c("det/nondet", "counts"), nfarms = 10, nsite = 100, nrep = 2, 
           nspec = 60, mean.lambda = 2, sig.loglam = 1, mu.beta.loglam = 1, 

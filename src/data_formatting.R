@@ -1,3 +1,4 @@
+library(rstan)
 library(here)
 library(magrittr)
 stdz <- function(x){
@@ -61,3 +62,12 @@ HETH <-  list(y=y[,,"Hermit Thrush"], elevation = elevation, elevation_std = ele
 SWTH <- list(y=y[,,"Swainson's Thrush"], elevation = elevation, elevation_std = elevation_std, R=nsite, J=nrep)
 save(HETH, file = here("fmt/HETH.Rdata"))
 save(SWTH, file = here("fmt/SWTH.Rdata"))
+obs <- y
+y<- obs[,,"Hermit Thrush"]
+K <- 10
+R = nsite
+J = nrep
+stan_rdump(list =  c('y','elevation', 'elevation_std','R','J','K'), file = here("fmt/HETH.Rdump"))
+
+y <- obs[,,"Swainson's Thrush"]
+stan_rdump(list =  c('y','elevation', 'elevation_std','R','J','K'), file = here("fmt/SWTH.Rdump"))

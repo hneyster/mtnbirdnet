@@ -20,8 +20,9 @@ transformed data {
 }
 
 parameters {
-    real<lower=0, upper=1> p; 
-    real<lower=0> M;
+    real logit_p;       // 
+   
+    real M;
     real a;
     real b;
     real c;
@@ -38,7 +39,7 @@ model {
   c ~ normal(0,5);
   d ~ normal(0,5);
 
-  p ~ normal(.5,.5); // prior for the detection probability
+  logit_p ~ logistic(0,1); // prior for the mean detection probability, in logistic space (=0.5 in real scale). 
  
 
   // Likelihood
@@ -48,10 +49,10 @@ model {
       vector[K - max_y[i] + 1] lp; //it's the product, lambda*p that's calculated
       
       for (j in 1:(K - max_y[i] + 1))
-        lp[j] = poisson_lpmf(max_y[i] + j - 1 | (M*(1/(1+exp(a+b*elevation_std[i])))*(1/(1+exp(c-d*elevation_std[i]))))) //lpmf bc poisson is discrete. 
+        lp[j] = poisson_log_lpmf(max_y[i] + j - 1 | (M*(1/(1+exp(a+b*elevation_std[i])))*(1/(1+exp(c-d*elevation_std[i]))))) //lpmf bc poisson is discrete. 
       // max_y[i]+j-1 is n_i
       //This reports the probability that n_i takes this value given different samples of lambda 
-      + binomial_lpmf(y[i,] | max_y[i] + j - 1, p); // implicitly sums across T (y[i] is vectorized)
+      + binomial_logit_lpmf(y[i,] | max_y[i] + j - 1, logit_p); // implicitly sums across T (y[i] is vectorized)
       target += log_sum_exp(lp);
 
   }
@@ -59,9 +60,9 @@ model {
 
 generated quantities{
   int N[R];
-  // real pred[R];
+ //   real pred[R]
  for (i in 1:R){
-       N[i] = poisson_rng(M*(1/(1+exp(a+b*elevation_std[i])))*(1/(1+exp(c-d*elevation_std[i]))));
+       N[i] = poisson_log_rng(M*(1/(1+exp(a+b*elevation_std[i])))*(1/(1+exp(c-d*elevation_std[i]))));
 //       //PPC[i,s] = binomial_rng (N[i], logit_p ) ;
 
    

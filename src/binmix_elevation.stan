@@ -100,7 +100,7 @@ for (s in 1:S){
       vector[K - max_y[i,s] + 1] lp; //it's the product, lambda*p that's calculated
       
       for (j in 1:(K - max_y[i,s] + 1))
-        lp[j] = poisson_log_lpmf(max_y[i,s] + j - 1 | (M[s]*(1/(1+exp(a[s]+b[s]*elevation_std[i])))*(1/(1+exp(c[s]+d[s]*elevation_std[i]))))) //lpmf bc poisson is discrete. 
+        lp[j] = poisson_log_lpmf(max_y[i,s] + j - 1 | (M[s]*(1/(1+exp(a[s]+b[s]*elevation_std[i])))*(1/(1+exp(c[s]-d[s]*elevation_std[i]))))) //lpmf bc poisson is discrete. 
       // max_y[i]+j-1 is n_i
       //This reports the probability that n_i takes this value given different samples of lambda 
       + binomial_logit_lpmf(y[i,,s] | max_y[i,s] + j - 1, logit_p[s]); // implicitly sums across T (y[i] is vectorized)
@@ -115,7 +115,7 @@ generated quantities{
 // 
  for (i in 1:R){
     for (s in 1:S){
-       N[i,s] = poisson_log_rng(M[s]*(1/(1+exp(a[s]+b[s]*elevation_std[i])))*(1/(1+exp(c[s]+d[s]*elevation_std[i]))));
+       N[i,s] = poisson_log_rng(M[s]*(1/(1+exp(a[s]+b[s]*elevation_std[i])))*(1/(1+exp(c[s]-d[s]*elevation_std[i]))));
 //       //PPC[i,s] = binomial_rng (N[i,s], logit_p[s] ) ;
      }
    }
